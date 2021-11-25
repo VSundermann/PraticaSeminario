@@ -4,95 +4,143 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace app1
-{
-    class Lista
-    {
-        private No _cabeca, _cauda;
+class Program{
+  public class Teste{
+    public class Celula{
+      public String Nome{get; set;}
+      public int idade{get; set;}
+      public int ID{get; set;}
+      public Celula Prox{get; set;}
+      public Celula Ant{get; set;}
+    }
 
-        //Inserir elemento no fim da lista
-        public void insereFim(string elemento) {
-            No novoNo = new No();
-            novoNo.Valor = elemento;
+    public class ListaD{
+      public Celula Sentinela{get; set;}
 
-            if(_cabeca == null)
-            {
-                _cabeca = novoNo;
-            }
-            else
-            {
-                _cauda.Proximo = novoNo;   
-            }
-            _cauda = novoNo;
+      public void InsertCel(Celula novaCel){
+        if (Sentinela == null){
+          Sentinela = novaCel;
+        } else {
+          var ultimaCel = GetLastCel();
+          ultimaCel.Prox = novaCel;
+          novaCel.Ant = ultimaCel;
         }
-
-        //Inserir elemento no inicio da lista
-        public void insereInicio(string elemento){
-            No novo = new No();
-            novo.Valor = elemento;
-
-            if(_cabeca == null)
-            {
-                _cabeca = novo;
-                _cauda = novo;
-            }
-            else
-            {
-                novo.Proximo = _cabeca;
-            }
-            _cabeca = novo;
+      }
+  
+      public Celula GetLastCel(){
+        var celAux = Sentinela;
+        
+        while (celAux.Prox != null){
+          celAux = celAux.Prox;
         }
         
-        //Retirar elemento do fim da lista
-        public void retiraFim() {
-            if (_cabeca == null)
-                return;
+        return celAux;  
+      }
 
-            if (_cabeca.Proximo == null) {
-                Console.WriteLine("Elemento retirado: " + _cabeca.Valor);
-                _cabeca = null;               
-            }
-            else
-            {
-                No ultimo = _cabeca.Proximo;
-                No penultimo = _cabeca;
-
-                while (ultimo.Proximo != null) {
-                    penultimo = ultimo;
-                    ultimo = ultimo.Proximo;
-                }
-                penultimo.Proximo = null;
-                Console.WriteLine("Elemento retirado: " + ultimo.Valor);
-            }
-            this.exibir();           
+      public List<Celula> GetCels(){
+        var listaAux = new List<Celula>();
+        var celAux = Sentinela;
+        
+        while (celAux != null){
+          listaAux.Add(celAux);
+          celAux = celAux.Prox;
         }
+        
+        return listaAux;
+      }
 
-        //Retirar elemento do inicio da lista
-        public void retiraInicio()
-        {
-            if (_cabeca != null)
-            {
-                Console.WriteLine("Elemento retirado: " + _cabeca.Valor);
-                _cabeca = _cabeca.Proximo;
-            }
-            exibir();
+      public List<Celula> GetCelsInv(){
+        var listaAux = new List<Celula>();
+        var celAux = GetLastCel();
+        
+        while (celAux != null){
+          listaAux.Add(celAux);
+          celAux = celAux.Ant;
         }
+        
+        return listaAux;
+      }
 
-        //Exibir elementos da lista
-        public void exibir() {
-            if(_cabeca != null)
-            {
-                No temp = _cabeca;
-                while (temp != null) {
-                    Console.Write(temp.Valor+" ");
-                    temp = temp.Proximo;
-                }
-                Console.WriteLine();
-            }
-            else
-            {
-                Console.WriteLine("\nLista vazia");
-            }
+      public void UpdateCel(Celula procuraCel){
+        var celAux = Sentinela;
+              
+        while (celAux != null){
+          if (procuraCel.ID == celAux.ID){
+            procuraCel.Nome = celAux.Nome;
+            procuraCel.idade = celAux.idade;
+            return;
+          }
+          
+          celAux = celAux.Prox;
         }
+      }
+
+      public void DeleteCel(int celulaId){
+        var celAux = Sentinela;
+        
+        if (Sentinela.ID == celulaId){
+          Sentinela = Sentinela.Prox;
+        } else {
+          while (celAux != null){
+            if (celulaId == celAux.ID){
+              celAux.Prox.Ant = celAux.Ant;
+              celAux.Ant.Prox = celAux.Prox;
+              return;
+            }
+          }
+        }
+      }
     }
+    
+    public static void Main(string[] args){
+
+      var listaDupla = new ListaD();
+      InsertCels(listaDupla);
+      PrintLista(listaDupla);
+      Console.WriteLine("");
+      PrintListaInv(listaDupla);
+    }
+
+    public static void InsertCels(ListaD listaPrin){
+      var Cel1 = new Celula() { Nome = "Anna Klara", idade = 19, ID = 622};
+      var Cel2 = new Celula() { Nome = "Victor Gabriel", idade =19, ID = 027};
+      var Cel3 = new Celula() { Nome = "Leonardo Mendes", idade = 15, ID = 345};
+      var Cel4 = new Celula() { Nome = "João Antonio", idade = 32, ID = 999};
+      var Cel5 = new Celula() { Nome = "Carlos Prates", idade = 47, ID = 420};
+      var Cel6 = new Celula() { Nome = "Amelia Watson", idade = 22, ID = 218};
+      var Cel7 = new Celula() { Nome = "Michael Jackson", idade = 79, ID = 369};
+      var Cel8 = new Celula() { Nome = "Maria Silvia", idade = 63, ID = 145};
+      var Cel9 = new Celula() { Nome = "Marco Rodrigo", idade = 48, ID = 893};
+  
+      listaPrin.InsertCel(Cel1);
+      listaPrin.InsertCel(Cel2);
+      listaPrin.InsertCel(Cel3);
+      listaPrin.InsertCel(Cel4);
+      listaPrin.InsertCel(Cel5);
+      listaPrin.InsertCel(Cel6);
+      listaPrin.InsertCel(Cel7);
+      listaPrin.InsertCel(Cel8);
+      listaPrin.InsertCel(Cel9);
+    }
+
+    public static void PrintLista(ListaD listaPrin){
+      Console.WriteLine($"Printando a Lista");
+      
+      foreach (var item in listaPrin.GetCels()){
+        Console.WriteLine($"Nome: {item.Nome} - Idade: {item.idade} - ID {item.ID}");
+      }
+      
+      Console.WriteLine();
+    }
+
+    public static void PrintListaInv(ListaD listaPrin){
+      Console.WriteLine($"Printando a Lista de tras pra frente");
+      
+      foreach (var item in listaPrin.GetCelsInv()){
+        Console.WriteLine($"Nome: {item.Nome} - Idade: {item.idade} - ID {item.ID}");
+      }
+      
+      Console.WriteLine();
+    }
+  }
 }
